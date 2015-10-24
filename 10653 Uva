@@ -1,0 +1,72 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<queue>
+#include<math.h>
+using namespace std;
+int ma[1020][1020];
+int dx[4]={0,1,0,-1};
+int dy[4]={1,0,-1,0};
+int main()
+{
+    int r,c;
+    while(true)
+    {
+        cin>>r>>c;
+        if(r==0&&c==0)break;
+        for(int i=0;i<r;i++)
+        {
+            for(int j=0;j<c;j++)
+            {
+                ma[i][j]=0;
+            }
+        }
+        int nr,y;
+        cin>>nr;
+        while(nr--)
+        {
+            cin>>y;
+            int f,x;
+            cin>>f;
+            while(f--)
+            {
+                cin>>x;
+                ma[y][x]=1;
+            }
+        }
+        int xi,xf,yi,yf;
+        cin>>yi>>xi>>yf>>xf;
+        queue<pair<pair<int,int>,int> > q;
+        q.push(make_pair(make_pair(yi,xi),0));
+        int dis;
+        ma[yi][xi]=-1;
+        while(!q.empty())
+        {
+            int fila=q.front().first.first;
+            int colu=q.front().first.second;
+            dis=q.front().second;
+            //cout<<"going through "<<fila<<" "<<colu<<" with dis: "<<dis<<endl;
+            q.pop();
+            if(fila==yf&&colu==xf)break;
+            int k,l;
+            for(int n=0;n<4;n++)
+            {
+                k=fila+dy[n];
+                l=colu+dx[n];
+                if(k>=0&&l>=0&&k<r&&l<c)
+                {
+                    if(ma[k][l]!=1&&ma[k][l]!=-1)
+                    {
+                        q.push(make_pair(make_pair(k,l),dis+1));
+                        ma[k][l]=-1;
+                    }
+                    else
+                    {
+                        //cout<<"wall or already visited"<<endl;
+                    }
+                }
+            }
+        }
+        cout<<dis<<endl;
+    }
+}
