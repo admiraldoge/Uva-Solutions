@@ -1,0 +1,66 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<queue>
+#include<math.h>
+using namespace std;
+int main()
+{
+    int nd;
+    cin>>nd;
+    vector<vector<int> > g(nd);
+    for(int y=0;y<nd;y++)
+    {
+        int nf,f;
+        cin>>nf;
+        while(nf--)
+        {
+            cin>>f;
+            g[y].push_back(f);
+        }
+    }
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int ini;
+        cin>>ini;
+        //cout<<":::::::::: "<<ini<<" :::::::::::::::::"<<endl;
+        queue<int> q;
+        vector<int> d(nd,-1);
+        q.push(ini);
+        d[ini]=0;
+        int maxi=-1;
+        int value;
+        vector<int> dis(nd,0);
+        while(!q.empty())
+        {
+            int x=q.front();
+            //cout<<"tru "<<x<<endl;
+            dis[d[x]]++;
+            if(dis[d[x]]>maxi&&d[x]!=0)
+            {
+                maxi=dis[d[x]];
+                value=d[x];
+                //cout<<"gana "<<value<<" con "<<maxi<<endl;
+            }
+            q.pop();
+            for(int n=0;n<g[x].size();n++)
+            {
+                if(d[g[x][n]]==-1)
+                {
+                    q.push(g[x][n]);
+                    d[g[x][n]]=d[x]+1;
+                }
+            }
+        }
+        if(maxi>=1)
+        {
+            cout<<maxi<<" "<<value<<endl;
+        }
+        else
+        {
+            cout<<0<<endl;
+        }
+    }
+}
