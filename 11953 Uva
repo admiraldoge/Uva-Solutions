@@ -1,0 +1,82 @@
+#include<iostream>
+#include<stdio.h>
+#include<vector>
+#include<string>
+#include<cstdlib>
+#include<cstdlib>
+#include<stdlib.h>
+#include<algorithm>
+#include<queue>
+#include<math.h>
+#include<stack>
+#include<set>
+#include<map>
+#include<sstream>
+#include<fstream>
+using namespace std;
+
+int dx[4]={0,1,-1,0};
+int dy[4]={1,0,0,-1};
+int main()
+{
+    int t;
+    cin>>t;
+    for(int k=0;k<t;k++)
+    {
+        int n;
+        cin>>n;
+        vector<pair<int,int> > v;
+        char ma[n][n];
+        int us[n][n];
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                cin>>ma[i][j];
+                us[i][j]=-1;
+                if(ma[i][j]=='x')
+                {
+                    v.push_back(make_pair(i,j));
+                }
+            }
+        }
+        int aux=v.size();
+        int sol=0;
+        for(int i=0;i<aux;i++)
+        {
+            sol++;
+            if(us[v[i].first][v[i].second]==-1)
+            {
+                us[v[i].first][v[i].second]=1;
+                //cout<<"empezando bfs en "<<v[i].first<<"-"<<v[i].second<<endl;
+                queue<pair<int,int> > q;
+                q.push(make_pair(v[i].first,v[i].second));
+                while(!q.empty())
+                {
+                    int newy=q.front().first;
+                    int newx=q.front().second;
+                    q.pop();
+                    //cout<<"tru "<<newy<<"-"<<newx<<endl;
+                    for(int p=0;p<4;p++)
+                    {
+                        int k=newy+dy[p];
+                        int l=newx+dx[p];
+                        //cout<<"triyin to  "<<k<<"-"<<l<<endl;
+                        if(k>=0&&k<n&&l>=0&&l<n)
+                        {
+                            if(ma[k][l]=='@'||ma[k][l]=='x')
+                            {
+                                if(us[k][l]==-1)
+                                {
+                                    q.push(make_pair(k,l));
+                                    us[k][l]=1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        cout<<"Case "<<k+1<<": "<<sol<<endl;
+    }
+}
