@@ -1,0 +1,113 @@
+#include<iostream>
+#include<stdio.h>
+#include<vector>
+#include<string>
+#include<cstdlib>
+#include<cstdlib>
+#include<stdlib.h>
+#include<algorithm>
+#include<queue>
+#include<math.h>
+#include<stack>
+#include<set>
+#include<map>
+#include<sstream>
+#include<fstream>
+using namespace std;
+int dx[4]={0,1,0,-1};
+int dy[4]={1,0,-1,0};
+int main()
+{
+    int m,n;
+    while(cin>>m>>n)
+    {
+        char w,l;
+        char ma[m][n];
+        int us[m][n];
+        vector<pair<int,int> > land;
+        map<char,int> mapi;
+        map<char,int>::iterator it;
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                cin>>ma[i][j];
+            }
+        }
+        int yi,xi;
+        cin>>yi>>xi;
+        char lan=ma[yi][xi];
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                us[i][j]=-1;
+                if(ma[i][j]==lan)
+                {
+                    land.push_back(make_pair(i,j));
+                }
+            }
+        }
+        int tam=land.size();
+        int maxi=0;
+        for(int i=0;i<tam;i++)
+        {
+            int cant=0;
+            bool home=false;
+            if(us[land[i].first][land[i].second]==-1)
+            {
+                //cout<<"empezando bfs en "<<land[i].first<<"-"<<land[i].second<<endl;
+                us[land[i].first][land[i].second]=1;
+                queue<pair<int,int> > q;
+                q.push(make_pair(land[i].first,land[i].second));
+                while(!q.empty())
+                {
+                    cant++;
+                    int y=q.front().first;
+                    int x=q.front().second;
+                    q.pop();
+                    if(x==n-1)
+                    {
+                        if(us[y][0]==-1&&ma[y][0]==lan)
+                        {
+                            //cout<<"going to "<<y<<"-"<<0<<endl;
+                            us[y][0]=1;
+                            q.push(make_pair(y,0));
+                        }
+                    }
+                    if(x==0)
+                    {
+                        if(us[y][n-1]==-1&&ma[y][n-1]==lan)
+                        {
+                            //cout<<"going to "<<y<<"-"<<n-1<<endl;
+                            us[y][n-1]=1;
+                            q.push(make_pair(y,n-1));
+                        }
+                    }
+                    //cout<<"tru: "<<y<<"-"<<x<<endl;
+                    if(y==yi&&x==xi)home=true;
+                    for(int u=0;u<4;u++)
+                    {
+                        int k=y+dy[u];
+                        int l=x+dx[u];
+                        if(k>=0&&l>=0&&k<m&&l<n)
+                        {
+                            if(us[k][l]==-1&&ma[k][l]==lan)
+                            {
+                                //cout<<"going to "<<k<<"-"<<l<<endl;
+                                us[k][l]=1;
+                                q.push(make_pair(k,l));
+                            }
+                        }
+                    }
+                }
+                //cout<<"tamaño del bfs= "<<cant<<endl;
+                if(cant>maxi&&!home)
+                {
+                    maxi=cant;
+                }
+            }
+        }
+        cout<<maxi<<endl;
+    }
+}
