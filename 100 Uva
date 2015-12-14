@@ -1,0 +1,59 @@
+#include<iostream>
+#include<stdio.h>
+#include<vector>
+#include<string>
+#include<cstdlib>
+#include<cstdlib>
+#include<stdlib.h>
+#include<algorithm>
+#include<queue>
+#include<math.h>
+#include<stack>
+#include<set>
+#include<map>
+#include<sstream>
+#include<fstream>
+using namespace std;
+int main()
+{
+    int x,y;
+    while(cin>>x>>y)
+    {
+        bool lol=false;
+        if(x>y)
+        {
+            lol=true;
+            int aux=y;
+            y=x;
+            x=aux;
+        }
+        int maxi=0;
+        for(int i=x;i<=y;i++)
+        {
+            int num=i;
+            int cant=0;
+            while(true)
+            {
+                cant++;
+                if(num==1)break;
+                if(num%2==0)
+                {
+                    num/=2;
+                }
+                else
+                {
+                    num=(3*num)+1;
+                }
+            }
+            if(cant>maxi)maxi=cant;
+        }
+        if(lol)
+        {
+            cout<<y<<" "<<x<<" "<<maxi<<endl;
+        }
+        else
+        {
+            cout<<x<<" "<<y<<" "<<maxi<<endl;
+        }
+    }
+}
