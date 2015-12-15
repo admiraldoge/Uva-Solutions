@@ -1,0 +1,52 @@
+#include<iostream>
+#include<stdio.h>
+#include<vector>
+#include<string>
+#include<cstdlib>
+#include<cstdlib>
+#include<stdlib.h>
+#include<algorithm>
+#include<queue>
+#include<math.h>
+#include<stack>
+#include<set>
+#include<map>
+#include<sstream>
+#include<fstream>
+using namespace std;
+int main()
+{
+    string a;
+    char co='"';
+    string nco1="``";
+    string nco2="''";
+    bool sw=true;
+    while(getline(cin,a))
+    {
+        for(int i=0;i<a.length();i++)
+        {
+            if(a[i]==co)
+            {
+                if(sw)
+                {
+                    sw=false;
+                    string prefix=a.substr(0,i);
+                    string sufix=a.substr(i+1,a.length()-i-1);
+                    //cout<<prefix<<" "<<sufix<<endl;
+                    a=prefix+nco1+sufix;
+                    //cout<<"new a:: "<<a<<endl;
+                }
+                else
+                {
+                    sw=true;
+                    string prefix=a.substr(0,i);
+                    string sufix=a.substr(i+1,a.length()-i-1);
+                    //cout<<prefix<<" "<<sufix<<endl;
+                    a=prefix+nco2+sufix;
+                    //cout<<"new a:: "<<a<<endl;
+                }
+            }
+        }
+        cout<<a<<endl;
+    }
+}
