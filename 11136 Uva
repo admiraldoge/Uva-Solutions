@@ -1,0 +1,75 @@
+#include<iostream>
+#include<stdio.h>
+#include<vector>
+#include<string>
+#include<cstdlib>
+#include<cstdlib>
+#include<stdlib.h>
+#include<algorithm>
+#include<queue>
+#include<math.h>
+#include<stack>
+#include<set>
+#include<map>
+#include<sstream>
+#include<fstream>
+using namespace std;
+int main()
+{
+   int n;
+   while(true)
+   {
+       cin>>n;
+       if(n==0)break;
+       long long sol=0;
+       map<long long,long long> m;
+       map<long long,long long>::iterator it;
+       map<long long,long long>::reverse_iterator itf;
+       while(n--)
+       {
+           long long k,num;
+           cin>>k;
+           while(k--)
+           {
+               cin>>num;
+               it=m.find(num);
+               if(it==m.end())
+               {
+                   m.insert(pair<long long,long long>(num,1));
+               }
+               else
+               {
+                   it->second++;
+               }
+           }
+           if(m.size()!=1)
+           {
+               it=m.begin();
+               it->second--;
+               itf=m.rbegin();
+               itf->second--;
+               sol+=(itf->first-it->first);
+               //cout<<"se gasto "<<sol<<" y se uso "<<it->first<<" Y "<<itf->first<<endl;
+               if(it->second==0)
+               {
+                   m.erase(it->first);
+               }
+               if(itf->second==0)
+               {
+                   m.erase(itf->first);
+               }
+           }
+           else
+           {
+               it=m.begin();
+               it->second--;
+               it->second--;
+               if(it->second==0)
+               {
+                   m.erase(it->first);
+               }
+           }
+       }
+       cout<<sol<<endl;
+   }
+}
