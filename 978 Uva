@@ -1,0 +1,99 @@
+#include<iostream>
+#include<stdio.h>
+#include<vector>
+#include<string>
+#include<cstdlib>
+#include<cstdlib>
+#include<stdlib.h>
+#include<algorithm>
+#include<queue>
+#include<math.h>
+#include<stack>
+#include<set>
+#include<map>
+#include<sstream>
+#include<fstream>
+using namespace std;
+int main()
+{
+    int nc;
+    cin>>nc;
+    for(int i=0;i<nc;i++)
+    {
+        if(i!=0)cout<<endl;
+        int ba,sg,sb,num;
+        cin>>ba>>sg>>sb;
+        multiset<int> g;
+        multiset<int> b;
+        multiset<int>::iterator itg;
+        multiset<int>::iterator itb;
+        for(int j=0;j<sg;j++)
+        {
+            cin>>num;
+            g.insert(num);
+        }
+        for(int j=0;j<sb;j++)
+        {
+            cin>>num;
+            b.insert(num);
+        }
+        while(!b.empty()&&!g.empty())
+        {
+            int cant=min(ba,(int)min(g.size(),b.size()));
+            vector<int> br;
+            vector<int> gr;
+            for(int l=0;l<cant;l++)
+            {
+                itg=g.end();
+                itb=b.end();
+                itg--;
+                itb--;
+                //cout<<*itg<<" VS. "<<*itb<<endl;
+                if(*itg>*itb)
+                {
+                    gr.push_back(*itg-*itb);
+                }
+                else
+                {
+                    if(*itg<*itb)
+                    {
+                        br.push_back(*itb-*itg);
+                    }
+                }
+                g.erase(itg);
+                b.erase(itb);
+            }
+            for(int t=0;t<gr.size();t++)
+            {
+                g.insert(gr[t]);
+            }
+            for(int t=0;t<br.size();t++)
+            {
+                b.insert(br[t]);
+            }
+        }
+        if(g.size()==0&&b.size()!=0)
+        {
+            cout<<"blue wins"<<endl;
+            for(multiset<int>::reverse_iterator rit=b.rbegin();rit!=b.rend();rit++)
+            {
+                cout<<*rit<<endl;
+            }
+        }
+        else
+        {
+            if(g.size()!=0&&b.size()==0)
+            {
+                cout<<"green wins"<<endl;
+                for(multiset<int>::reverse_iterator rit=g.rbegin();rit!=g.rend();rit++)
+                {
+                    cout<<*rit<<endl;
+                }
+            }
+            else
+            {
+                cout<<"green and blue died"<<endl;
+            }
+        }
+    }
+}
