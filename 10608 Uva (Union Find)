@@ -1,0 +1,62 @@
+#include<bits/stdc++.h>
+using namespace std;
+int p[10000000];
+void init(int n)
+{
+    for(int i=1;i<=n;i++)
+    {
+        p[i]=i;
+    }
+}
+int findx(int x)
+{
+    if(p[x]==x)
+    {
+        return x;
+    }
+    return p[x]=findx(p[x]);
+}
+bool sameset(int a,int b)
+{
+    if(findx(a)==findx(b))
+    {
+        return true;
+    }
+    return false;
+}
+void unir(int a,int b)
+{
+    a=findx(a);
+    b=findx(b);
+    if(a!=b)
+    {
+        p[a]=b;
+    }
+}
+vector<int> c;
+int main(){
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    int a,b,t,n,m;
+    cin>>t;
+    for(int cs=0;cs<t;cs++){
+        cin>>n>>m;
+        c.clear();
+        c.resize(n+1,0);
+        init(n);
+        for(int j=0;j<m;j++){
+            cin>>a>>b;
+            unir(a,b);
+            /*for(int i=1;i<=n;i++){
+                cout<<p[i]<<" ";
+            }cout<<endl;*/
+        }
+        int sol=-1;
+        for(int i=1;i<=n;i++){
+            c[findx(i)]++;
+            sol=max(sol,c[findx(i)]);
+        } 
+        cout<<sol<<endl;
+    }
+}
