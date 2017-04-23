@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+int p[10000000];
+//vector<int> s;
+void init(int n)
+{
+    for(int i=1;i<=n;i++)
+    {
+        p[i]=i;
+  //      s[i]=1;
+    }
+}
+int findx(int x)
+{
+    if(p[x]==x)
+    {
+        return x;
+    }
+    return p[x]=findx(p[x]);
+}
+bool sameset(int a,int b)
+{
+    if(findx(a)==findx(b))
+    {
+        return true;
+    }
+    return false;
+}
+void unir(int a,int b)
+{
+    a=findx(a);
+    b=findx(b);
+    if(a!=b)
+    {
+        //s[b]+=s[a];
+        p[a]=b;
+    }
+}
+set<int> se;
+int main(){
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    int t;
+    cin>>t;
+    cin.ignore();
+    char maxi,a,b;
+    string str;
+    bool sw=true;
+    for(int cs=0;cs<t;cs++){
+        se.clear();
+        cin>>maxi;
+        if(cs!=0)cout<<endl;
+        cin.ignore();
+        init(int(maxi));
+        while(getline(cin,str)){
+            if(str.empty())break;
+            a=str[0];
+            b=str[1];
+            //cout<<"Read:"<<a<<"-"<<b<<endl;
+            //cout<<int(a)<<" "<<int(b)<<endl;
+            unir(int(a),int(b));
+        }
+        for(int i=65;i<=int(maxi);i++){
+            //cout<<findx(i)<<" ";
+            se.insert(findx(p[i]));
+        }//cout<<endl;
+        cout<<se.size()<<endl;
+    }
+
+}
