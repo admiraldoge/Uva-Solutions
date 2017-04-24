@@ -1,0 +1,43 @@
+#include<bits/stdc++.h>
+using namespace std;
+set<string> str;
+map<int,set<string> > m;
+map<int,set<string> >::iterator it;
+set<string>::iterator its;
+int main(){
+	int t,p,te;
+	cin>>te;
+	for(int cs=0;cs<te;cs++){
+		if(cs!=0)cout<<endl;
+		str.clear();
+		m.clear();
+		cin>>p>>t;
+		string ca;
+		cin.ignore();
+		for(int i=1;i<=p;i++)m[i]=set<string>();
+		while(getline(cin,ca)){
+			//cout<<"Complete string read "<<ca<<endl;
+			if(ca.empty())break;
+			int pos=0,n1,n2;
+			string s1="";
+			string s2="";
+			while(ca[pos++]!=' ')s1+=ca[pos-1];
+			while(pos!=ca.size())s2+=ca[pos++];
+			//cout<<s1<<":"<<s2<<endl;
+			stringstream ss1(s1);
+			ss1>>n1;
+			m[n1].insert(s2);
+			//stringstream ss2(s2);
+			//ss2>>n2;
+			//	m[n1].insert(s2);
+			//cout<<"REad "<<n1<<" "<<n2<<endl;
+		}
+		string fs;
+		for(it=m.begin();it!=m.end();it++){
+			fs=",";
+		    for(its=it->second.begin();its!=it->second.end();its++)fs+=*its;
+			str.insert(fs);
+		}
+	    cout<<str.size()<<endl;
+	}
+}
