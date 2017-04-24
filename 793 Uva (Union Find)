@@ -1,0 +1,82 @@
+#include<bits/stdc++.h>
+using namespace std;
+int p[10000000];
+//vector<int> s;
+void init(int n)
+{
+    for(int i=1;i<=n;i++)
+    {
+        p[i]=i;
+  //      s[i]=1;
+    }
+}
+int findx(int x)
+{
+    if(p[x]==x)
+    {
+        return x;
+    }
+    return p[x]=findx(p[x]);
+}
+bool sameset(int a,int b)
+{
+    if(findx(a)==findx(b))
+    {
+        return true;
+    }
+    return false;
+}
+void unir(int a,int b)
+{
+    a=findx(a);
+    b=findx(b);
+    if(a!=b)
+    {
+        //s[b]+=s[a];
+        p[a]=b;
+    }
+}
+set<int> se;
+int main(){
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    int t;
+    cin>>t;
+    cin.ignore();
+    string sa,sb;
+    int a,b,pos,maxi,wa,ac;
+    string str;
+    bool sw=true;
+    for(int cs=0;cs<t;cs++){
+        if(cs!=0)cout<<endl;
+        cin>>maxi;
+        ac=0;wa=0;
+        cin.ignore();
+        init(maxi);
+        while(getline(cin,str)){
+            if(str.empty())break;
+            sa="";sb="";
+            pos=2;
+            while(str[pos++]!=' ')sa+=str[pos-1];
+            while(pos!=str.size())sb+=str[pos++];
+            //cout<<"Read:"<<sa<<"-"<<sb<<endl;
+            stringstream ssa(sa);
+            ssa>>a;
+            stringstream ssb(sb);
+            ssb>>b;
+            //cout<<"Final :"<<a<<"-"<<b<<endl;
+            if(str[0]=='c'){
+                unir(int(a),int(b));
+            }else{
+                if(findx(a)==findx(b)){
+                    ac++;
+                }else{
+                    wa++;
+                }
+            }
+        }
+        cout<<ac<<","<<wa<<endl;
+    }
+
+}
