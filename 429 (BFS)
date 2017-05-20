@@ -1,0 +1,102 @@
+#include<bits/stdc++.h>
+#define INF 999999999
+using namespace std;
+map<string,int> ma;
+vector<string> v;
+set<string> s;
+vector<vector<int> > g;
+vector<int> d;
+string fp,sp;
+void separate(string a){
+	int pos=0;
+	fp="";
+	sp="";
+	while(a[pos]!=' '){
+		fp+=a[pos];
+		pos++;
+	}
+	pos++;
+	while(pos!=a.size()){
+		sp+=a[pos];
+		pos++;
+	}
+}
+bool dif1(string a,string b){
+	if(a.size()!=b.size())return false;
+	int dif=0;
+	for(int i=0;i<a.size();i++){
+		if(a[i]!=b[i])dif++;
+	}
+	//cout<<a<< " and "<<b<<" have "<<dif<<" diferencties"<<endl;
+	if(dif==1)return true;
+	return false;
+
+}
+void bfs(string ini){
+	queue<int> q;
+	q.push(ma[ini]);
+	d[ma[ini]]=0;
+	while(!q.empty()){
+		int x=q.front();
+		//cout<<"at "<<x<<endl;
+		q.pop();
+		for(int i=0;i<g[x].size();i++){
+			int nx=g[x][i];
+			if(d[x]+1<d[nx]){
+				q.push(nx);
+				d[nx]=d[x]+1;
+			}
+		}
+	}
+}
+int main(){
+	int n;
+	cin>>n;
+	cin.ignore();
+	string entrada;
+	for(int cs=0;cs<n;cs++){
+		v.clear();
+		ma.clear();
+		s.clear();
+		d.clear();
+		g.clear();
+		int id=0;
+		while(getline(cin,entrada)){
+			if(entrada=="*")break;
+			if(s.find(entrada)==s.end()){
+				v.push_back(entrada);
+				ma[entrada]=id;
+				id++;
+				//cout<<entrada<<endl;
+			}
+			s.insert(entrada);	
+		}
+		g.resize(s.size(),vector<int>());
+		d.clear();
+		d.resize(s.size(),INF);
+		for(int i=0;i<v.size();i++){
+			for(int j=i+1;j<v.size();j++){
+				if(dif1(v[i],v[j])){
+					g[i].push_back(j);
+					g[j].push_back(i);
+					//cout<<v[i]<<" "<<v[j]<<endl;
+				}
+			}
+		}
+		bool sf=true;
+		while(getline(cin,entrada)){
+			if(entrada.size()==0)break;
+				separate(entrada);
+				d.clear();
+				d.resize(s.size(),INF);
+				bfs(fp);
+				if(sf&&cs!=0){
+					cout<<endl;
+					sf=false;
+				}
+				cout<<fp<<" "<<sp<<" "<<d[ma[sp]];
+				//if(cs!=n-1)
+				cout<<endl;
+		}
+	}
+}
