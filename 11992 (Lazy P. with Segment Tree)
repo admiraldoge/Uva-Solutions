@@ -1,0 +1,160 @@
+#include<bits/stdc++.h>
+#define ll long long
+#define inf 1000000000
+#define end end1
+using namespace std;
+//int aux[100002];
+int start,op,row;
+int end;
+int _sum,_min,_max;
+struct Node{
+	int maxv,minv,sumv;
+	int addv,setv;
+};
+vector<vector<Node> >st;
+void build(int node,int l,int r){
+	//cout<<"building: "<<endl;
+	if(l==r){
+		st[row][node].sumv=0;
+		st[row][node].addv=0;
+		st[row][node].setv=-1;
+		return;
+	}
+	int mid=(l+r)/2;
+	build(2*node,l,mid);
+	build(2*node+1,mid+1,r);
+	st[row][node].sumv=st[row][node*2].sumv+st[row][node*2+1].sumv;
+	st[row][node].minv=min(st[row][node*2].minv,st[row][node*2+1].minv);
+	st[row][node].maxv=max(st[row][node*2].maxv,st[row][node*2+1].maxv);
+}
+void pushdown(int node){
+	 int lc = 2*node, rc = 2*node+1;  
+   if(st[row][node].setv >= 0){  
+     st[row][lc].setv = st[row][rc].setv = st[row][node].setv;  
+     st[row][lc].addv = st[row][rc].addv = 0;  
+     st[row][node].setv = -1;  
+   }  
+   if(st[row][node].addv > 0){  
+     st[row][lc].addv += st[row][node].addv;  
+     st[row][rc].addv += st[row][node].addv;  
+     st[row][node].addv = 0;  
+   }  
+}
+void maintain(int node, int l, int r){  
+     int lc = node*2, rc = node*2+1;  
+     if(r > l){  
+       st[row][node].sumv = st[row][lc].sumv + st[row][rc].sumv;  
+       st[row][node].minv = min(st[row][lc].minv, st[row][rc].minv);  
+       st[row][node].maxv = max(st[row][lc].maxv, st[row][rc].maxv);  
+     }  
+     if(st[row][node].setv >= 0){  
+       st[row][node].minv = st[row][node].maxv = st[row][node].setv;  
+       st[row][node].sumv = st[row][node].setv * (r-l+1);  
+     }  
+     if(st[row][node].addv!=0){  
+       st[row][node].minv += st[row][node].addv;  
+       st[row][node].maxv += st[row][node].addv;  
+       st[row][node].sumv += st[row][node].addv * (r-l+1);  
+     }  
+} 
+void update(int node, int l, int r,int val){  
+	if(start <= l && end >= r){  
+		if(op == 1){
+			//cout<<"op1"<<endl;
+			st[row][node].addv += val;
+		}  
+       	else{
+       		//cout<<"op: "<<op<<endl;
+      		st[row][node].setv = val; 
+       		st[row][node].addv = 0;
+       	}  
+     }  
+    else{  
+       int lc = 2*node, rc = 2*node+1, mid = (r+l)/2;  
+       pushdown(node);  
+       if(start <= mid){
+       		update(lc, l, mid,val);
+       }else{
+       		maintain(lc, l, mid);
+       }  
+       if(end > mid) {
+       		update(rc, mid+1, r,val);
+       }else{
+       		maintain(rc, mid+1, r);
+       }  
+     }  
+     maintain(node, l, r);  
+   }  
+void query(int node, int l, int r, int add){  
+ 	if(st[row][node].setv >= 0){  
+       int v = st[row][node].setv + add + st[row][node].addv;  
+       _sum += v * (min(r,end)-max(l,start)+1);  
+       _min = min(_min, v);  
+       _max = max(_max, v);  
+    }  
+	else if(start <= l && end >= r){  
+       _sum += st[row][node].sumv + add * (r-l+1);  
+       _min = min(_min, st[row][node].minv + add);  
+       _max = max(_max, st[row][node].maxv + add);  
+	}  
+    else{  
+       int lc = 2*node, rc = 2*node+1, mid = (r+l)/2; 
+       if(start <= mid) query(lc, l, mid, add + st[row][node].addv);  
+       if(end > mid) query(rc, mid+1, r, add + st[row][node].addv);  
+    }  
+}  
+int main(){
+	int r,c,m;
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	while(cin>>r>>c>>m){
+		//for(int i=0;i<c;i++)st[i]=Node;
+		st.clear();
+		st.resize(r+1);
+		for(int i=0;i<r;i++){
+			row=i;
+			st[i].resize(4*c+1,Node());
+			build(1,0,c-1);
+		}
+		//}
+		int x1,y1,x2,y2,num;
+		for(int cs=0;cs<m;cs++){
+			cin>>op;
+			//cout<<"operation: "<<op<<endl;
+			if(op==1||op==2){
+				cin>>x1>>y1>>x2>>y2>>num;
+				start=y1-1;
+				end=y2-1;
+				for(int i=x1-1;i<=x2-1;i++){
+					row=i;
+					update(1,0,c-1,num);
+				}
+			}else{
+				cin>>x1>>y1>>x2>>y2;
+				start=y1-1;
+				end=y2-1;
+				_sum=0;
+				_min=inf;
+				_max=-inf;
+				for(int i=x1-1;i<=x2-1;i++){
+					row=i;
+					query(1,0,c-1,0);
+				}
+				cout<<_sum<<" "<<_min<<" "<<_max<<"\n";
+			}
+			/*
+			for(int i=0;i<r;i++){
+				row=i;
+				for(int j=0;j<c;j++){
+					start=j;
+					end=j;
+					_sum=0;
+					query(1,0,c-1,0);
+					cout<<_sum<<" ";
+				}cout<<"\n";
+			}cout<<"\n";
+			*/
+		}
+	}
+}
